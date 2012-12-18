@@ -1,0 +1,24 @@
+@(invoices: Iterable[domain.Invoice])
+
+@import helper.bootstrap._
+
+@main("Statistics") {
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Update count</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			@for(i <- invoices) {
+				<tr>
+					<td>@i.id</td>
+					<td>@i.version</td>
+					<td><a class="btn btn-small" href="@routes.Application.detail(i.id)"><i class="icon-search" /></a></td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}

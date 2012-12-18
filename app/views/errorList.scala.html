@@ -1,0 +1,9 @@
+@(errors: List[String] = List())
+
+@if(!errors.isEmpty) {
+	<div class="alert alert-error">
+		@for(error <- errors) {
+			<span>@error</span>
+		}
+	</div>
+}

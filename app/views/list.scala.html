@@ -1,0 +1,42 @@
+@(invoices: Iterable[domain.Invoice], form: Form[String], errors: List[String] = List())
+
+@import helper.bootstrap._
+
+@main("Existing Invoices") {
+
+	@errorList(errors)
+
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Status</th>
+				<th>Version</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			@for(i <- invoices) {
+				<tr>
+					<td>@i.id</td>
+					<td>@i match {
+						case i: domain.DraftInvoice => { DRAFT }
+						case i: domain.SentInvoice => { SENT }
+						case i: domain.PaidInvoice => { PAID }
+					}</td>
+					<td>@i.version</td>
+					<td><a class="btn btn-small" href="@routes.Application.detail(i.id)"><i class="icon-search" /></a></td>
+				</tr>
+			}
+		</tbody>
+	</table>
+	
+	@helper.form(action = routes.Application.addInvoice, ('class -> "form-horizontal")) {
+		@helper.inputText(form("id"))
+		<div class="control-group">
+			<div class="controls">
+				<button type="submit" class="btn btn-primary">Add</button>
+			</div>
+		</div>
+	}
+}

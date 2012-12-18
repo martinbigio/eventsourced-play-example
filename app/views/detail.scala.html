@@ -1,0 +1,64 @@
+@(invoice: domain.Invoice, itemForm: Form[domain.InvoiceItem], sendForm: Form[domain.InvoiceAddress], errors: List[String] = List())
+
+@import helper.bootstrap._
+
+@main("Invoice Detail") {
+
+	@errorList(errors)
+
+	<div class="dl-horizontal">
+		<dt>ID</dt>
+		<dd>@invoice.id</dd>
+		<dt>Version</dt>
+		<dd>@invoice.version</dd>
+		<dt>Sum</dt>
+		<dd>@invoice.sum</dd>
+		<dt>Discount</dt>
+		<dd>@invoice.discount</dd>
+		<dt>Total</dt>
+		<dd>@invoice.total</dd>
+	</div>
+	
+	<table class="table table-stripped">
+		<thead>
+			<tr>
+				<th>Description</th>
+				<th>Count</th>
+				<th>Amount</th>
+			</tr>
+		</thead>
+		<tbody>
+			@for(item <- invoice.items) {
+				<tr>
+					<td>@item.description</td>
+					<td>@item.count</td>
+					<td>@item.amount</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+		
+	@helper.form(action = routes.Application.addItem(invoice.id), ('class -> "form-horizontal")) {
+		@helper.inputText(itemForm("description"))
+		@helper.inputText(itemForm("count"))
+		@helper.inputText(itemForm("amount"))
+		<div class="control-group">
+			<div class="controls">
+				<button type="submit" class="btn btn-primary">Add item</button>
+			</div>
+		</div>
+	}
+	
+	@helper.form(action = routes.Application.sendInvoice(invoice.id), ('class -> "form-horizontal")) {
+		@helper.inputText(sendForm("name"))
+		@helper.inputText(sendForm("street"))
+		@helper.inputText(sendForm("city"))
+		@helper.inputText(sendForm("country"))
+		<div class="control-group">
+			<div class="controls">
+				<a href="@routes.Application.list" class="btn">Back</a>
+				<button type="submit" class="btn btn-primary">Send invoice</button>
+			</div>
+		</div>
+	}
+}
